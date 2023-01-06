@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using portWebApi.Data;
 
@@ -11,9 +12,11 @@ using portWebApi.Data;
 namespace portWebApi.Migrations
 {
     [DbContext(typeof(PortfolioDbContext))]
-    partial class PortfolioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230106023617_SecondMigration")]
+    partial class SecondMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace portWebApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("EducationUser", b =>
+                {
+                    b.Property<Guid>("EducationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("EducationId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EducationUser");
+                });
 
             modelBuilder.Entity("LanguagesUser", b =>
                 {
@@ -148,12 +166,7 @@ namespace portWebApi.Migrations
                     b.Property<DateTime?>("ToDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Educations");
                 });
@@ -166,9 +179,6 @@ namespace portWebApi.Migrations
 
                     b.Property<string>("Alt")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PostsId")
                         .HasColumnType("uniqueidentifier");
@@ -192,9 +202,6 @@ namespace portWebApi.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -257,9 +264,6 @@ namespace portWebApi.Migrations
                     b.Property<DateTime>("ToDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.ToTable("Ocupations");
@@ -303,9 +307,6 @@ namespace portWebApi.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.ToTable("Socials");
@@ -320,9 +321,6 @@ namespace portWebApi.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -341,9 +339,6 @@ namespace portWebApi.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -422,8 +417,8 @@ namespace portWebApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Phone")
+                        .HasColumnType("int");
 
                     b.Property<string>("Salt")
                         .IsRequired()
@@ -467,6 +462,21 @@ namespace portWebApi.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("WorkHistories");
+                });
+
+            modelBuilder.Entity("EducationUser", b =>
+                {
+                    b.HasOne("portWebApi.Models.Domain.Education", null)
+                        .WithMany()
+                        .HasForeignKey("EducationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("portWebApi.Models.Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LanguagesUser", b =>
@@ -555,17 +565,6 @@ namespace portWebApi.Migrations
                     b.Navigation("Posts");
                 });
 
-            modelBuilder.Entity("portWebApi.Models.Domain.Education", b =>
-                {
-                    b.HasOne("portWebApi.Models.Domain.User", "User")
-                        .WithMany("Education")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("portWebApi.Models.Domain.Image", b =>
                 {
                     b.HasOne("portWebApi.Models.Domain.Posts", "Posts")
@@ -630,8 +629,6 @@ namespace portWebApi.Migrations
 
             modelBuilder.Entity("portWebApi.Models.Domain.User", b =>
                 {
-                    b.Navigation("Education");
-
                     b.Navigation("Location");
 
                     b.Navigation("Posts");

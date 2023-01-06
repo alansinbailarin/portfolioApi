@@ -7,12 +7,9 @@
         public string Title { get; set; }
         public string? Body { get; set; }
 
-        public Guid? ImageId { get; set; }
-        public IEnumerable<Image> Image { get; set; }
-        public Guid CategoryId { get; set; }
         public IEnumerable<Category> Category { get; set; }
-
-        public Guid UserId { get; set; }
+        public IEnumerable<Image> Image { get; set; }
         public User User { get; set; }
+        public Guid UserId { get; set; }
     }
 }

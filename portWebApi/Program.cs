@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using portWebApi.Data;
+using portWebApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddDbContext<PortfolioDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Portfolio"));
 });
 
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
