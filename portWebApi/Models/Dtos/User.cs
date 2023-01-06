@@ -1,4 +1,6 @@
-﻿namespace portWebApi.Models.Dtos
+﻿using portWebApi.Models.Dtos;
+
+namespace portWebApi.Models.Dtos
 {
     public class User
     {
@@ -14,5 +16,17 @@
         public bool IsAdmin { get; set; }
         public string? About { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        // Relaciones con otras tables
+        public IEnumerable<Ocupation> Ocupation { get; set; }
+        public IEnumerable<TechnicalSkills> TechnicalSkills { get; set; }
+        public IEnumerable<SoftSkills> SoftSkills { get; set; }
+        public IEnumerable<Location> Location { get; set; }
+        public IEnumerable<Education> Education { get; set; }
+        public IEnumerable<WorkHistory> WorkHistory { get; set; }
+        public IEnumerable<Social> Social { get; set; }
+        public IEnumerable<Languages> Languages { get; set; }
+        public IEnumerable<Trajectory> Trajectory { get; set; }
+        public IEnumerable<Posts> Posts { get; set; }
     }
 }
